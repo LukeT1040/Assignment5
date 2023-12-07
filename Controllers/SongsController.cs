@@ -21,22 +21,29 @@ namespace Assignment5.Controllers
         }
 
         // GET: Songs
-        public async Task<IActionResult> Index(string songGenre)
+        public async Task<IActionResult> Index(string songGenre, string songArtist)
         {
             if (_context.Songs == null)
             {
                 return Problem("Entity set 'McvSongsContext.Song' is null");
             }
             IQueryable<string> genreQuery = from s in _context.Songs orderby s.Genre select s.Genre;
+            IQueryable<string> artistQuery = from x in _context.Songs orderby x.Artist select x.Artist;
             var songs = from s in _context.Songs select s;
             if (!string.IsNullOrEmpty(songGenre))
             {
                 songs = songs.Where(x => x.Genre == songGenre);
             }
+            if (!string.IsNullOrEmpty(songArtist))
+            {
+                songs = songs.Where(x => x.Artist == songArtist);
+            }
             var songGerneVM = new SongGenreViewModel
             {
                 Genres = new SelectList(await genreQuery.Distinct().ToListAsync()),
+                Artists = new SelectList(await artistQuery.Distinct().ToListAsync()),
                 Songs = await songs.ToListAsync()
+
             };
             return View(songGerneVM);
         }
