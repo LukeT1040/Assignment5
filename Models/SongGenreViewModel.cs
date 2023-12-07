@@ -9,5 +9,9 @@ namespace Assignment5.Models
         public SelectList? Genres { get; set; }
         public string? SongGenre { get; set; }
 
+        public SelectList? Artists { get; set; }
+
+        public string? SongArtist { get; set; }
+
     }
 }
